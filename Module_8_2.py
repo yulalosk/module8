@@ -1,68 +1,31 @@
-class Car:
-    def __init__(self, model, vin:int, numbers:str):
-        self.model = model
-        if self.__is_valid_vin(vin):
-            self.vin = vin
-        if self.__is_valid_numbers(numbers):
-            self.numbers = numbers
+def personal_sum(numbers:list):
+    result=0
+    incorrect_data = 0
+    for i in numbers:
+        try:
+            result += i
+        except TypeError:
+            print(f'Некорректный тип данных -{i}')
+            incorrect_data += 1
+    return result, incorrect_data
 
-    def __is_valid_vin(self,vin_number):
-        if not isinstance(vin_number,int):
-            raise IncorrectVinNumber('некорректный VIN')
-        elif  vin_number not in range(1000000,99999999):
-            raise IncorrectVinNumber('неверный диапазон')
-        return True
-
-    def __is_valid_numbers(self,numbers):
-            if not isinstance(numbers, str):
-                raise IncorrectCarNumbers('некорректный тип номера')
-            elif len(numbers) != 6:
-                raise IncorrectCarNumbers('неверная длина номера')
-            return True
+def calculate_average(numbers:list):
+    summa = personal_sum(numbers)
+    try:
+        return summa[0] / (len(numbers) - summa[1])
+    except ZeroDivisionError:
+        return 0
+    except TypeError:
+        print('Неверный тип данных')
 
 
-class IncorrectVinNumber(Exception):
-    def __init__(self, message):
-        self.message = message
 
 
-class IncorrectCarNumbers(Exception):
-    def __init__(self, message):
-        self.message = message
 
-try:
-  first = Car('Model1', 1000000, 'f123dj')
-except IncorrectVinNumber as exc:
-  print(exc.message)
-except IncorrectCarNumbers as exc:
-  print(exc.message)
-else:
-  print(f'{first.model} успешно создан')
-
-
-try:
-  second = Car('Model2', 300, 'т001тр')
-except IncorrectVinNumber as exc:
-  print(exc.message)
-except IncorrectCarNumbers as exc:
-  print(exc.message)
-else:
-  print(f'{second.model} успешно создан')
-
-try:
-  third = Car('Model3', 2020202, 'нет номера')
-except IncorrectVinNumber as exc:
-  print(exc.message)
-except IncorrectCarNumbers as exc:
-  print(exc.message)
-else:
-  print(f'{third.model} успешно создан')
-
-try:
-  fourth = Car('Model1', 1000000, 123456)
-except IncorrectVinNumber as exc:
-  print(exc.message)
-except IncorrectCarNumbers as exc:
-  print(exc.message)
-else:
-  print(f'{fourth.model} успешно создан')
+#s = personal_sum([42, 15, 36, 13])
+s = personal_sum([1, "Строка", 3, "Ещё Строка"])
+print(s)
+print(f'Результат 1: {calculate_average("1, 2, 3")}')
+print(f'Результат 2: {calculate_average([1, "Строка", 3, "Ещё Строка"])}') # Учитываются только 1 и 3
+print(f'Результат 3: {calculate_average(567)}') # Передана не коллекция
+print(f'Результат 4: {calculate_average([42, 15, 36, 13])}') # Всё должно работать
